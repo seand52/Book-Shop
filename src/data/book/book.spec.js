@@ -42,6 +42,7 @@ describe("Books constructor", () => {
       book = new Book({title, genre, price})
 
       fs.writeFileSync(Book._file, JSON.stringify([book]));
+      debugger
     });
 
     it("should succeed on correct data", async () => {

@@ -75,4 +75,5 @@ class Genre {
   }
 }
 Genre._file = "./genres.json";
-module.exports = Genre;
+// module.exports = Genre;
+export default Genre

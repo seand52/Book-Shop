@@ -1,0 +1,33 @@
+.book-card {
+  padding: 10px;
+  border: 1px solid #ccc;
+  min-width: 300px;
+  border-radius: 5px;
+
+  &__header {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+
+  &__info {
+    justify-content: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-bottom: 1px solid #ccc;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.fa-edit:before {
+  cursor: pointer;
+}
+
+.fa-trash-alt:before {
+  cursor: pointer;
+}

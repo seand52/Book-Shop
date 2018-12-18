@@ -1,98 +1,122 @@
-const {Book, Genre} = require('../data')
+import validate from '../utils/validate'
+import data from '../data/index'
+// const data = require('../data/index')
+// const validate = require('../utils/validate')
+
+
+const {storage, Book, Genre} = data
 const logic = {
-  addBook(title, price, genre) {
-    if (typeof title !== 'string') throw TypeError(`${title} is not a string`)
-    if (typeof price !== 'string') throw TypeError(`${price} is not a string`)
-    if (typeof genre !== 'string') throw TypeError(`${genre} is not a string`)
-    if (!title.trim()) throw Error('title is empty or blank')
-    if (!price.trim()) throw Error('price is empty or blank')
-    if (!genre.trim()) throw Error('genre is empty or blank')
-    const book = new Book({title, price, genre})
-    return book.save()
+
+  _listBooks() {
+    return JSON.parse(storage.getItem('books'))
   },
 
-  retrieveBooks(genre) {
-    // if (typeof genre !== 'string' && genre!==undefined) throw TypeError(`${genre} is not a string`)
-    // if (!genre.trim() && genre===undefined) throw Error('genre is empty or blank')
-    
-    if (!genre) {
-      return Book.findBooks()
-        .then(books => books)
-    } else {
-      return Book.findBooks(genre)
-        .then(books => books)
-    }
+  _saveBooks(books) {
+    storage.setItem('books', JSON.stringify(books))
+  },
 
+  _listGenres() {
+    return JSON.parse(storage.getItem('genres'))
+  },
+
+  _saveGenres(genres) {
+    storage.setItem('genres', JSON.stringify(genres))
+  },
+
+  addBook(title, price, genre) {
+    validate([
+      {key: 'title', value: title, type: String},
+      {key: 'price', value: price, type: Number},
+      {key: 'genre', value: genre, type: String}
+    ])
+    const book = new Book({title, price, genre})
+    const books = this._listBooks()
+    books.push(book)
+    this._saveBooks(books)
+  },
+
+  retrieveBooksbyGenre(genre) {
+    validate([
+      {key: 'genre', value: genre, type: String},
+    ])
+      return this._listBooks().filter(item => item.genre === genre)
+  },
+
+  retrieveBooks() {
+    return this._listBooks()
   },
 
   updateBook(id, title, price, genre) {
-    // if (typeof title !== 'string' && title!==null) throw TypeError(`${title} is not a string`)
-    // if (typeof price !== 'string' && price!==null) throw TypeError(`${price} is not a string`)
-    // if (typeof genre !== 'string' && genre!==null) throw TypeError(`${genre} is not a string`)
-    // if (!title.trim() && title!==null) throw Error('title is empty or blank')
-    // if (!price.trim() && price!==null) throw Error('price is empty or blank')
-    // if (!genre.trim() && genre!==null) throw Error('genre is empty or blank')
+    validate([
+      {key: 'title', value: title, type: String, optional: true},
+      {key: 'price', value: price, type: Number, optional: true},
+      {key: 'genre', value: genre, type: String, optional: true}
+    ])
+        const books = this._listBooks()
+        const index = books.findIndex(item => item.id === id)
+        if (index < 0) throw Error(`book with id ${id} not found`)
+        books[index].title = title ? title : books[index].title
+        books[index].genre = genre ? genre : books[index].genre
+        books[index].price = price ? price : books[index].price
+        return this._saveBooks(books)
 
-    return Book.findById(id)
-      .then(book => {
-        if (!book) throw Error(`book with id ${id} not found`)
-        book.title = title ? title : book.title
-        book.genre = genre ? genre : book.genre
-        book.price = price ? price : book.price
 
-        return book.save()
-
-      })
   },
 
   deleteBook(id) {
-    // if (typeof id !== 'string') throw TypeError(`${id} is not a string`)
-    // if (!id.trim()) throw Error('id is empty or blank')
+    validate([
+      {key: 'id', value: id, type: Object},
+    ])
 
-    return Book.findById(id)
-      .then(book => {
-        return book.remove()
-      })
+    const books = logic._listBooks()
+    const index = books.findIndex(item => item.id === id)
+    if (index < 0) throw Error(`book with id ${id} not found`)
+    books.splice(index,1)
+    this._saveBooks(books)
+
   },
 
   addGenre(name) {
-    if (typeof name !== 'string') throw TypeError(`${name} is not a string`)
-    if (!name.trim()) throw Error('name is empty or blank')
+    validate([
+      {key: 'name', value: name, type: String},
+    ])
 
     const genre = new Genre({name})
-    return genre.save()
+    const genres = this._listGenres()
+    genres.push(genre)
+    this._saveGenres(genres)
   },
 
   deleteGenre(id) {
-    // if (typeof id !== 'string') throw TypeError(`${id} is not a string`)
-    // if (!id.trim()) throw Error('id is empty or blank')
-
-    return Genre.findById(id) 
-      .then(genre => {
-        return genre.remove()
-      })
+    validate([
+      {key: 'id', value: id, type: Object},
+    ])
+    const genres = logic._listGenres()
+    const index = genres.findIndex(item => item.id === id)
+    if (index < 0) throw Error(`book with id ${id} not found`)
+    genres.splice(index,1)
+    this._saveGenres(genres)
   },
 
   retrieveGenres() {
-    return Genre.findGenres() 
-      .then(genres => {
-        return genres
-      })
+    return this._listGenres()
   },
 
   updateGenre(id, name) {
-    // if (typeof id !== 'string') throw TypeError(`${id} is not a string`)
-    // if (!id.trim()) throw Error('id is empty or blank')
+    validate([
+      {key: 'id', value: id, type: Object},
+      {key: 'name', value: name, type: Object},
+    ])
     if (typeof name !== 'string') throw TypeError(`${name} is not a string`)
     if (!name.trim()) throw Error('name is empty or blank')
 
-    return Genre.findById(id) 
-      .then(genre => {
-        genre.name = name
-
-        return genre.save()
-      })
+    const genres = this._listGenres()
+    const index = genres.findIndex(item => item.id === id)
+    if (index < 0) throw Error(`book with id ${id} not found`)
+    genres[index].name = name ? name : genres[index].name
+    return this._saveGenres(genres)
   },
 }
 
-module.exports = logic
+// module.exports = logic
+export default logic
