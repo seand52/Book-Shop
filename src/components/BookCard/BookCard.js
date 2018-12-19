@@ -13,13 +13,14 @@ class BookCard extends Component {
   };
 
   componentDidUpdate = prevProps => {
+
     if (prevProps.length === this.props.length) {
       if (
         prevProps.book.title !== this.props.book.title ||
         prevProps.book.price !== this.props.book.price ||
         prevProps.book.genre !== this.props.book.genre
       ) {
-        this.setState({ edit: !this.state.edit });
+        if(this.state.edit === true) this.setState({ edit: !this.state.edit });
       }
     }
   };

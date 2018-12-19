@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, notification } from "antd";
 import FormItem from "antd/lib/form/FormItem";
 import logic from "../../logic/index";
-
+import { withRouter } from "react-router-dom";
+import './creategenre.css'
 class CreateGenre extends Component {
   state = {
     name: ""
@@ -14,16 +15,31 @@ class CreateGenre extends Component {
     this.setState({ name });
   };
 
+  openNotification = (type, message) => {
+    notification[type]({
+      message: message,
+      duration: 1.5,
+    })
+  }
+
   onHandleSubmit = event => {
     event.preventDefault();
+    try {
     logic.addGenre(this.state.name);
+    this.openNotification('success', 'genre created')
+    this.props.history.push('/')
+    }
+    catch(err) {
+      this.openNotification('error', err.message)
+    }
   };
   render() {
     return (
+      <section className="create-genre-container">
       <Form
         layout="inline"
         onSubmit={this.onHandleSubmit}
-        className="create-book-form"
+        className="create-genre-form"
       >
         <FormItem>
           <Input
@@ -43,8 +59,9 @@ class CreateGenre extends Component {
           </Button>
         </FormItem>
       </Form>
+      </section>
     );
   }
 }
 
-export default CreateGenre;
+export default withRouter(CreateGenre);

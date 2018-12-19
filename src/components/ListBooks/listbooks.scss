@@ -1,5 +1,7 @@
-.main-body h1 {
-  margin-top: 20px;
+.main-body {
+  & h1 {
+    margin-top: 20px;
+  }
 }
 
 .books-list-section {
@@ -22,7 +24,5 @@
 }
 
 body {
-  background: #f0efef;
+  background: rgb(240, 239, 239);
 }
-
-/*# sourceMappingURL=listbooks.css.map */

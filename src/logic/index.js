@@ -35,15 +35,24 @@ const logic = {
     this._saveBooks(books)
   },
 
-  retrieveBooksbyGenre(genre) {
+  retrieveBooksbyGenre(genre, minPrice, maxPrice) {
     validate([
-      {key: 'genre', value: genre, type: String},
+      {key: 'genre', value: genre, type: String, optional: true},
     ])
-      return this._listBooks().filter(item => item.genre === genre)
+    if (genre && genre!=='search all') return this._listBooks().filter(item => item.genre === genre && item.price>=minPrice && item.price <=maxPrice)
+    else return this._listBooks().filter(item => item.price>=minPrice && item.price <=maxPrice)
   },
 
   retrieveBooks() {
     return this._listBooks()
+  },
+
+  retrievePriceRange() {
+    const books = this._listBooks()
+    const minimumPrice = books.reduce((min, p) => p.price < min ? p.price : min, books[0].price)
+    const maximumPrice = books.reduce((max, p) => p.price > max ? p.price : max, books[0].price)
+    return {minimumPrice, maximumPrice}
+
   },
 
   updateBook(id, title, price, genre) {
@@ -80,9 +89,10 @@ const logic = {
     validate([
       {key: 'name', value: name, type: String},
     ])
-
-    const genre = new Genre({name})
     const genres = this._listGenres()
+    const existing = genres.find(item => item.name === name)
+    if (existing) throw new Error(`${name} is already a genre`)
+    const genre = new Genre({name})
     genres.push(genre)
     this._saveGenres(genres)
   },
@@ -116,6 +126,7 @@ const logic = {
     genres[index].name = name ? name : genres[index].name
     return this._saveGenres(genres)
   },
+
 }
 
 // module.exports = logic

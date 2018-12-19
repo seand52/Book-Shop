@@ -1,40 +1,61 @@
 import React, { Component } from "react";
 import logic from "../../logic/index";
 import BookCard from "../BookCard/BookCard";
+import Filter from "../Filter/Filter";
 import "./listbooks.css";
 class ListBooks extends Component {
   state = {
     books: null,
-    deleted: false
+    totalBooks: null,
+    genres: null
   };
 
   componentDidMount() {
     const books = logic.retrieveBooks();
-    this.setState({ books });
+    this.setState({ books, totalBooks: books });
   }
 
   componentWillReceiveProps(props) {
     if (props) {
       const books = logic.retrieveBooks();
-      this.setState({ books });
+      const genres = logic.retrieveGenres()
+      this.setState({ books, genres, totalBooks: books });
     }
   }
 
-  handleDeleteBook = (id) => {
-    logic.deleteBook(id)
-    const books = logic.retrieveBooks()
-    this.setState({books })
-  }
+  handleDeleteBook = id => {
+    logic.deleteBook(id);
+    const books = logic.retrieveBooks();
+    this.setState({ books });
+  };
+
+  handleFilter = (genre, minPrice, maxPrice) => {
+      const books = logic.retrieveBooksbyGenre(genre, minPrice, maxPrice);
+      this.setState({ books });
+
+  };
 
   render() {
-    const { books } = this.state;
+    const { books, genres, totalBooks } = this.state;
     return (
-      <section className="books-list-section">
-        <h1>Books List</h1>
+      <section className="main-body">
+      {/* <h1>Books List</h1> */}
+      <div className="books-list-section">
+        <Filter books={totalBooks && totalBooks.length} genres={genres} filter={this.handleFilter} />
+     
         <section className="books-list">
           {books &&
-            books.map((item, index) => <BookCard length={books.length} editToggle={this.props.editToggle} key={index} book={item} deleteBook={this.handleDeleteBook} />)}
+            books.map((item, index) => (
+              <BookCard
+                length={books.length}
+                editToggle={this.props.editToggle}
+                key={index}
+                book={item}
+                deleteBook={this.handleDeleteBook}
+              />
+            ))}
         </section>
+      </div>
       </section>
     );
   }
