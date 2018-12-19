@@ -1,9 +1,7 @@
-import validate from '../utils/validate'
-import data from '../data/index'
-// const data = require('../data/index')
-// const validate = require('../utils/validate')
-
-
+// import validate from '../utils/validate'
+// import data from '../data/index'
+const data = require('../data/index')
+const validate = require('../utils/validate')
 const {storage, Book, Genre} = data
 const logic = {
 
@@ -23,21 +21,28 @@ const logic = {
     storage.setItem('genres', JSON.stringify(genres))
   },
 
-  addBook(title, price, genre) {
+    addBook(title, price, genre) {
     validate([
       {key: 'title', value: title, type: String},
       {key: 'price', value: price, type: Number},
       {key: 'genre', value: genre, type: String}
     ])
-    const book = new Book({title, price, genre})
-    const books = this._listBooks()
-    books.push(book)
-    this._saveBooks(books)
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const book = new Book({title, price, genre})
+        const books = this._listBooks()
+        books.push(book)
+        resolve(this._saveBooks(books))
+      }, 200)
+    })
+    
   },
 
   retrieveBooksbyGenre(genre, minPrice, maxPrice) {
     validate([
       {key: 'genre', value: genre, type: String, optional: true},
+      {key: 'minPrice', value: minPrice, type: Number},
+      {key: 'maxPrice', value: maxPrice, type: Number}
     ])
     if (genre && genre!=='search all') return this._listBooks().filter(item => item.genre === genre && item.price>=minPrice && item.price <=maxPrice)
     else return this._listBooks().filter(item => item.price>=minPrice && item.price <=maxPrice)
@@ -129,5 +134,5 @@ const logic = {
 
 }
 
-// module.exports = logic
-export default logic
+module.exports = logic
+// export default logic

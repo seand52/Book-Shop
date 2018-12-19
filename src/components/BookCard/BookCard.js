@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./bookcard.css";
-import logic from "../../logic/index";
 import CreateBook from "../CreateBook/CreateBook";
 
 class BookCard extends Component {

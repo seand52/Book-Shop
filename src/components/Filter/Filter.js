@@ -115,6 +115,7 @@ class Filter extends Component {
             <Slider
               className="min-price__slider"
               value={minPrice}
+              max={maxSlider}
               orientation="horizontal"
               onChange={this.handleOnChangeMinPrice}
               onChangeComplete={this.handleOnChangeComplete}

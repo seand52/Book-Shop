@@ -24,5 +24,5 @@ function validate(params) {
     })
 }
 
-// module.exports = validate
-export default validate
+module.exports = validate
+// export default validate

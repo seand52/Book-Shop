@@ -3,6 +3,7 @@ import logic from "../../logic/index";
 import BookCard from "../BookCard/BookCard";
 import Filter from "../Filter/Filter";
 import "./listbooks.css";
+
 class ListBooks extends Component {
   state = {
     books: null,
@@ -39,7 +40,6 @@ class ListBooks extends Component {
     const { books, genres, totalBooks } = this.state;
     return (
       <section className="main-body">
-      {/* <h1>Books List</h1> */}
       <div className="books-list-section">
         <Filter books={totalBooks && totalBooks.length} genres={genres} filter={this.handleFilter} />
      

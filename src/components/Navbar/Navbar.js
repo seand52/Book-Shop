@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Layout, Menu } from "antd";
 import "./navbar.css";
-import { withRouter, Link } from "react-router-dom";
-
+import { withRouter } from "react-router-dom";
 const { Header } = Layout;
 
 class Navbar extends Component {
@@ -26,7 +25,7 @@ class Navbar extends Component {
     return (
       <Header className="nav-menu">
         <div onClick={this.onlogoClick} className="logo">
-          LOGO
+          Bookshop
         </div>
         <Menu
           className="menu"

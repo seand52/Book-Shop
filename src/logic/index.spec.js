@@ -21,7 +21,7 @@ describe("logic", () => {
       beforeEach(() => {
         title = `title-${Math.random()}`;
         genre = `genre-${Math.random()}`;
-        price = `price-${Math.random()}`;
+        price = Math.random();
 
   
       });
@@ -45,7 +45,7 @@ describe("logic", () => {
         genre1 = `genre-${Math.random()}`;
         genre2 = `genre-${Math.random()}`;
         genre3 = `genre-${Math.random()}`;
-        price = `price-${Math.random()}`;
+        price = Math.random();
         book1 = new Book({ title, genre: genre1, price });
         book2 = new Book({ title, genre: genre2, price });
         book3 = new Book({ title, genre: genre3, price });
@@ -64,7 +64,7 @@ describe("logic", () => {
       });
 
       it("should retrieve books for a specific genre", () => {
-        const books = logic.retrieveBooksbyGenre(genre1)
+        const books = logic.retrieveBooksbyGenre(genre1, 0, 100)
           expect(books.length).to.equal(1);
           const [_book1] = books;
           expect(_book1.genre).to.equal(genre1);

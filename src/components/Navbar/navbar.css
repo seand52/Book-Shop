@@ -1,18 +1,18 @@
-
 .nav-menu {
-   display: flex;
-   justify-content: flex-start;
+  display: flex;
+  justify-content: flex-start;
+}
 
- }
-
- .logo {
+.logo {
   width: 120px;
   height: 64px;
-  background: rgba(255,255,255,.2);
+  color: white;
   margin-right: auto;
   cursor: pointer;
 }
 
-.menu{
+.menu {
   margin-left: 50px;
 }
+
+/*# sourceMappingURL=navbar.css.map */
