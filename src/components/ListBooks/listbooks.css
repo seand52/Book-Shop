@@ -1,0 +1,33 @@
+.main-body h1 {
+  margin-top: 20px;
+}
+
+.books-list-section {
+  margin-top: 40px;
+  display: flex;
+}
+@media only screen and (max-width: 768px) {
+  .books-list-section {
+    flex-direction: column;
+  }
+}
+
+.books-list {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  min-height: 300px;
+  align-items: flex-start;
+  margin: 20px;
+  border-radius: 20px;
+  flex: 1;
+  border: 2px solid #ccc;
+  padding: 20px;
+  background-color: aliceblue;
+}
+
+body {
+  background: #f0efef;
+}
+
+/*# sourceMappingURL=listbooks.css.map */

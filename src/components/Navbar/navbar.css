@@ -1,0 +1,18 @@
+.nav-menu {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.logo {
+  width: 120px;
+  height: 64px;
+  color: white;
+  margin-right: auto;
+  cursor: pointer;
+}
+
+.menu {
+  margin-left: 50px;
+}
+
+/*# sourceMappingURL=navbar.css.map */
