@@ -20,5 +20,6 @@ const defaultGenres = [
     name: "philosophy" 
   }
 ];
-// export default {Genre, defaultGenres}
-module.exports = {Genre, defaultGenres}
+export default {Genre, defaultGenres}
+//Export for tests
+// module.exports = {Genre, defaultGenres}

@@ -6,6 +6,11 @@
   margin-top: 40px;
   display: flex;
 }
+@media only screen and (max-width: 768px) {
+  .books-list-section {
+    flex-direction: column;
+  }
+}
 
 .books-list {
   display: flex;

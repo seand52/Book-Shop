@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { Form, Select } from "antd";
 import FormItem from "antd/lib/form/FormItem";
-import logic from "..//../logic/index";
+import logic from "../../logic/index";
+import {notification} from 'antd'
 import Slider from "react-rangeslider";
 import "react-rangeslider/lib/index.css";
 import "./filter.css";
+
 const Option = Select.Option;
 class Filter extends Component {
   state = {
@@ -15,24 +17,38 @@ class Filter extends Component {
     maxSlider: 100
   };
 
-  componentDidMount() {
-    const genres = logic.retrieveGenres();
-    const priceRange = logic.retrievePriceRange();
-    const { minimumPrice, maximumPrice } = priceRange;
-    this.setState({
-      genres,
-      minPrice: minimumPrice,
-      maxPrice: maximumPrice,
-      maxSlider: maximumPrice
-    });
+  openNotification = (type, message) => {
+    notification[type]({
+      message: message,
+      duration: 1.5,
+    })
   }
 
-  componentDidUpdate = prevProps => {
+  async componentDidMount() {
+    try {
+    const genres = await logic.retrieveGenres();
+    if (this.props.books > 0) {
+      const priceRange = await logic.retrievePriceRange();
+      const { minimumPrice, maximumPrice } = priceRange;
+      this.setState({
+        genres,
+        minPrice: minimumPrice,
+        maxPrice: maximumPrice,
+        maxSlider: maximumPrice
+      });
+    } 
+  } catch(err) {
+    this.openNotification("error", err.message)
+  }
+  }
+
+  componentDidUpdate = async prevProps => {
+    try {
     if (prevProps.genres && this.props.genres) {
       if (prevProps.genres.length !== this.props.genres.length) {
-        const genres = logic.retrieveGenres();
+        const genres = await logic.retrieveGenres();
         if (this.props.books > 0) {
-          const priceRange = logic.retrievePriceRange();
+          const priceRange = await logic.retrievePriceRange();
           const { minimumPrice, maximumPrice } = priceRange;
           this.setState({
             genres,
@@ -45,7 +61,7 @@ class Filter extends Component {
     }
     if (prevProps.books !== this.props.books) {
       if (this.props.books > 0) {
-        const priceRange = logic.retrievePriceRange();
+        const priceRange = await logic.retrievePriceRange();
         const { minimumPrice, maximumPrice } = priceRange;
         this.setState({
           minPrice: minimumPrice,
@@ -54,6 +70,21 @@ class Filter extends Component {
         });
       }
     }
+    debugger
+    if(this.props.edit !== prevProps.edit) {
+      if (this.props.books > 0) {
+        const priceRange = await logic.retrievePriceRange();
+        const { minimumPrice, maximumPrice } = priceRange;
+        this.setState({
+          minPrice: minimumPrice,
+          maxPrice: maximumPrice,
+          maxSlider: maximumPrice
+        });
+      }
+    }
+  } catch(err) {
+    this.openNotification("error", err.message)
+  }
   };
 
   onHandleGenreChange = value => {
@@ -62,10 +93,6 @@ class Filter extends Component {
     this.setState({ genre }, () => {
       this.props.filter(this.state.genre, minPrice, maxPrice);
     });
-  };
-
-  onHandleSubmit = event => {
-    event.preventDefault();
   };
 
   handleOnChangeMinPrice = value => {
@@ -84,6 +111,7 @@ class Filter extends Component {
     const { genre, minPrice, maxPrice } = this.state;
     this.props.filter(genre, minPrice, maxPrice);
   };
+  
   render() {
     const { genres, minPrice, maxPrice, maxSlider } = this.state;
     return (

@@ -28,5 +28,6 @@ const defaultBooks = [
   }
 ];
 
-// export default {Book, defaultBooks}
-module.exports = {Book, defaultBooks}
+export default {Book, defaultBooks}
+//Export for tests
+// module.exports = {Book, defaultBooks}

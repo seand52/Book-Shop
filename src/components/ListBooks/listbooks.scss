@@ -7,6 +7,9 @@
 .books-list-section {
   margin-top: 40px;
   display: flex;
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+}
 }
 
 .books-list {

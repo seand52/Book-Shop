@@ -15,8 +15,8 @@ class CreateBook extends Component {
     genres: null
   };
 
-  componentDidMount() {
-    const genres = logic.retrieveGenres();
+  async componentDidMount() {
+    const genres = await logic.retrieveGenres();
     this.setState({ genres });
     const { action, book } = this.props;
     if (action === "save") {
@@ -50,18 +50,18 @@ class CreateBook extends Component {
     this.setState({ genre });
   };
 
-  onHandleSubmit = event => {
+  onHandleSubmit = async event => {
     event.preventDefault();
     const { title, price, genre } = this.state;
     try {
     if (this.props.action !== "save") {
-      logic.addBook(title, price, genre); 
+      await logic.addBook(title, price, genre); 
       this.openNotification('success', 'Book added')
       this.props.history.push("/");
     } else {
-      logic.updateBook(this.props.book.id, title, price, genre);
+      await logic.updateBook(this.props.book.id, title, price, genre);
       this.openNotification('success', 'Book updated')
-      this.props.history.push("/");
+      this.props.editToggle()
     }
   }catch(err) {
     this.openNotification('error', err.message)

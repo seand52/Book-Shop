@@ -27,7 +27,7 @@ class BookCard extends Component {
   renderBody() {
     const { title, genre, price } = this.props.book;
     if (this.state.edit)
-      return <CreateBook action={"save"} book={this.props.book} />;
+      return <CreateBook editToggle={this.props.editToggle} action={"save"} book={this.props.book} />;
     else
       return (
         <div className="book-card__info">
