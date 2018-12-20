@@ -2,7 +2,7 @@
 
 This bookshelf app was created with create-react-app. For stlying I have used the framework [Ant Design](https://ant.design) for styles and added custom styles using SCSS and BEM methodology. 
 
-View the [Live Demo](https://beezy-bookshelf-seand.surge.sh) here!
+View the [Live Demo](https://beezy-bookshop-seand.surge.sh) here!
 
 # Getting Started
 
