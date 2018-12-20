@@ -8,16 +8,16 @@ class Genre {
 const defaultGenres = [
   {
     id: 1,
-    name: "history"
+    name: "Development"
   },
 
   {
     id: 2,
-    name: "development"
+    name: "Fantasy"
   },
 
   { id: 3, 
-    name: "philosophy" 
+    name: "Young Adult" 
   }
 ];
 export default {Genre, defaultGenres}

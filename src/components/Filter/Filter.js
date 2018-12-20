@@ -12,9 +12,9 @@ class Filter extends Component {
   state = {
     genres: null,
     genre: null,
-    minPrice: null,
-    maxPrice: null,
-    maxSlider: 100
+    minPrice: 0,
+    maxPrice: 0,
+    maxSlider: 0
   };
 
   openNotification = (type, message) => {
@@ -47,31 +47,10 @@ class Filter extends Component {
     if (prevProps.genres && this.props.genres) {
       if (prevProps.genres.length !== this.props.genres.length) {
         const genres = await logic.retrieveGenres();
-        if (this.props.books > 0) {
-          const priceRange = await logic.retrievePriceRange();
-          const { minimumPrice, maximumPrice } = priceRange;
-          this.setState({
-            genres,
-            minPrice: minimumPrice,
-            maxPrice: maximumPrice,
-            maxSlider: maximumPrice
-          });
-        }
+        this.setState({genres})
       }
     }
-    if (prevProps.books !== this.props.books) {
-      if (this.props.books > 0) {
-        const priceRange = await logic.retrievePriceRange();
-        const { minimumPrice, maximumPrice } = priceRange;
-        this.setState({
-          minPrice: minimumPrice,
-          maxPrice: maximumPrice,
-          maxSlider: maximumPrice
-        });
-      }
-    }
-    debugger
-    if(this.props.edit !== prevProps.edit) {
+    if (prevProps.books !== this.props.books || this.props.edit !== prevProps.edit) {
       if (this.props.books > 0) {
         const priceRange = await logic.retrievePriceRange();
         const { minimumPrice, maximumPrice } = priceRange;

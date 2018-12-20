@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./bookcard.css";
-import CreateBook from "../CreateBook/CreateBook";
+import EditBook from "../EditBook/EditBook";
 
 class BookCard extends Component {
   state = {
@@ -27,7 +27,7 @@ class BookCard extends Component {
   renderBody() {
     const { title, genre, price } = this.props.book;
     if (this.state.edit)
-      return <CreateBook editToggle={this.props.editToggle} action={"save"} book={this.props.book} />;
+      return <EditBook editToggle={this.props.editToggle} book={this.props.book} />;
     else
       return (
         <div className="book-card__info">

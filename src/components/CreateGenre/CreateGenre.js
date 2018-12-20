@@ -5,6 +5,7 @@ import logic from "../../logic/index";
 import { withRouter } from "react-router-dom";
 import "./creategenre.css";
 import GenresCard from "../GenresCard/GenresCard";
+
 class CreateGenre extends Component {
   state = {
     name: "",
@@ -25,18 +26,17 @@ class CreateGenre extends Component {
   };
 
   async componentDidMount() {
-    const genres = await logic.retrieveGenres()
-    this.setState({genres})
+    const genres = await logic.retrieveGenres();
+    this.setState({ genres });
   }
 
   onHandleSubmit = async event => {
     event.preventDefault();
     try {
       await logic.addGenre(this.state.name);
-      const genres = await logic.retrieveGenres()
-      this.setState({genres})
+      const genres = await logic.retrieveGenres();
       this.openNotification("success", "genre created");
-
+      this.setState({ genres });
     } catch (err) {
       this.openNotification("error", err.message);
     }
@@ -44,27 +44,27 @@ class CreateGenre extends Component {
 
   handleDeleteGenre = async (id, name) => {
     try {
-    await logic.deleteGenre(id, name)
-    const genres = await logic.retrieveGenres()
-    this.setState({genres})
-    this.openNotification("success", "genre deleted")
-    } catch(err) {
-      this.openNotification("error", err.message)
+      await logic.deleteGenre(id, name);
+      const genres = await logic.retrieveGenres();
+      this.setState({ genres });
+      this.openNotification("success", "genre deleted");
+    } catch (err) {
+      this.openNotification("error", err.message);
     }
-  }
+  };
 
   handleEdit = async () => {
-    try{
-    const genres = await logic.retrieveGenres()
-    this.setState({genres})
-    this.openNotification("success", "genre updated")
-    } catch(err) {
-      this.openNotification("error", err.message)
+    try {
+      const genres = await logic.retrieveGenres();
+      this.setState({ genres });
+      this.openNotification("success", "genre updated");
+    } catch (err) {
+      this.openNotification("error", err.message);
     }
-  }
+  };
 
   render() {
-    const {genres} = this.state
+    const { genres } = this.state;
     return (
       <div className="genres-wrapper">
         <section className="create-genre-container">
@@ -93,8 +93,15 @@ class CreateGenre extends Component {
           </Form>
         </section>
         <section className="manage-genres-container">
-          {genres && genres.map((item, index) => <GenresCard editGenre={this.handleEdit} delete={this.handleDeleteGenre} genre={item} key={index} />)}
-          
+          {genres &&
+            genres.map((item, index) => (
+              <GenresCard
+                editGenre={this.handleEdit}
+                delete={this.handleDeleteGenre}
+                genre={item}
+                key={index}
+              />
+            ))}
         </section>
       </div>
     );

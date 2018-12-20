@@ -6,7 +6,6 @@ import { withRouter } from "react-router-dom";
 import "./createbook.css";
 const Option = Select.Option;
 
-
 class CreateBook extends Component {
   state = {
     title: "",
@@ -18,22 +17,14 @@ class CreateBook extends Component {
   async componentDidMount() {
     const genres = await logic.retrieveGenres();
     this.setState({ genres });
-    const { action, book } = this.props;
-    if (action === "save") {
-      this.setState({
-        title: book.title,
-        price: book.price,
-        genre: book.genre
-      });
-    }
   }
 
   openNotification = (type, message) => {
     notification[type]({
       message: message,
-      duration: 1.5,
-    })
-  }
+      duration: 1.5
+    });
+  };
 
   onHandleTitleChange = event => {
     const title = event.target.value;
@@ -54,27 +45,23 @@ class CreateBook extends Component {
     event.preventDefault();
     const { title, price, genre } = this.state;
     try {
-    if (this.props.action !== "save") {
-      await logic.addBook(title, price, genre); 
-      this.openNotification('success', 'Book added')
-      this.props.history.push("/");
-    } else {
-      await logic.updateBook(this.props.book.id, title, price, genre);
-      this.openNotification('success', 'Book updated')
-      this.props.editToggle()
+      if (this.props.action !== "save") {
+        await logic.addBook(title, price, genre);
+        this.openNotification("success", "Book added");
+        this.props.history.push("/");
+      }
+    } catch (err) {
+      this.openNotification("error", err.message);
     }
-  }catch(err) {
-    this.openNotification('error', err.message)
-  }
   };
 
   render() {
     const { genres } = this.state;
     return (
-      <section className={(this.props.action==='save' ? "": "create-book-form-container")}>
+      <section className="create-book-form-container">
         <Form
           onSubmit={this.onHandleSubmit}
-          layout={this.props.action === "save" ? "vertical" : "inline"}
+          layout="inline"
           className="create-book-form"
         >
           <FormItem className="test" label="Title">
@@ -82,9 +69,6 @@ class CreateBook extends Component {
               style={{ width: 200 }}
               className="create-book-form__title"
               placeholder="Insert a title..."
-              defaultValue={
-                this.props.action === "save" ? this.props.book.title : ""
-              }
               onChange={this.onHandleTitleChange}
               ref="test"
             />
@@ -94,17 +78,11 @@ class CreateBook extends Component {
               style={{ width: 200 }}
               className="create-book-form__price"
               min={0}
-              defaultValue={
-                this.props.action === "save" ? this.props.book.price : ''
-              }
               onChange={this.onHandlePriceChange}
             />
           </FormItem>
           <FormItem label="Genre">
             <Select
-              defaultValue={
-                this.props.action === "save" ? this.props.book.genre : ""
-              }
               style={{ width: 200 }}
               onChange={this.onHandleGenreChange}
             >
@@ -122,7 +100,7 @@ class CreateBook extends Component {
               type="primary"
               htmlType="submit"
             >
-              {this.props.action === "save" ? "Save Changes" : "Create Book"}
+              Create Book
             </Button>
           </FormItem>
         </Form>

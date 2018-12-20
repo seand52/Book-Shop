@@ -10,21 +10,21 @@ class Book {
 const defaultBooks = [
   {
     id: 100,
-    title: "book1",
-    genre: "history",
-    price: 25
+    title: "Clean Code",
+    genre: "Development",
+    price: 29.99
   },
   {
     id: 101,
-    title: "book2",
-    genre: "development",
-    price: 30
+    title: "Twilight",
+    genre: "Young Adult",
+    price: 9.99
   },
   {
     id: 102,
-    title: "book3",
-    genre: "philosophy",
-    price: 35
+    title: "Game of Thrones",
+    genre: "Fantasy",
+    price: 19.99
   }
 ];
 
