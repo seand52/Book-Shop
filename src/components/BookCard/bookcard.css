@@ -21,6 +21,9 @@
   align-items: flex-start;
   border-bottom: 1px solid #ccc;
 }
+.book-card__info span {
+  font-weight: bold;
+}
 
 .actions {
   display: flex;

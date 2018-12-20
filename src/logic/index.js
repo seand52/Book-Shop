@@ -86,7 +86,7 @@ const logic = {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(this._listBooks());
-      });
+      }, 50);
     });
   },
 
@@ -107,7 +107,7 @@ const logic = {
           books[0].price
         );
         resolve({ minimumPrice, maximumPrice });
-      });
+      },50);
     });
   },
 

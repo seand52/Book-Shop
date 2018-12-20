@@ -1,4 +1,3 @@
-/*eslint-disable */
 const sessionStorage = require("sessionstorage");
 global.sessionStorage = sessionStorage;
 const logic = require(".");

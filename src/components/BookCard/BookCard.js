@@ -31,9 +31,9 @@ class BookCard extends Component {
     else
       return (
         <div className="book-card__info">
-          <p>Title: {title}</p>
-          <p>Genre: {genre}</p>
-          <p>Price: {`${price} euros`}</p>
+          <p><span>Title</span>: {title}</p>
+          <p><span>Genre</span>: {genre}</p>
+          <p><span>Price</span>: {`${price} euros`}</p>
         </div>
       );
   }

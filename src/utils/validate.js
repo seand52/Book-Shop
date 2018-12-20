@@ -1,4 +1,3 @@
-/*eslint-disable */
 function validate(params) {
     params.forEach(({ key, value, type, optional }) => {
         switch (type) {
