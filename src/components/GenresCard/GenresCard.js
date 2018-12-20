@@ -13,7 +13,7 @@ class GenresCard extends Component{
   render() {
     const {state: {edit}, props: {genre} } = this
   return (
-    <div className="genres-card">
+    <div className="genres-card" style={{background: 'aliceblue'}}>
       <div className="genres-card__name">
         {!edit ? <p>{genre.name}</p> : <EditGenre id={genre.id} name={genre.name} edit={this.props.editGenre} editToggle={this.editToggle}/>}
       </div>
