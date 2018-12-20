@@ -11,7 +11,7 @@ To run this program locally follow these instructions
 ## Clone the repository
 
 ```bash
-$ git clone xxx
+$ git clone https://github.com/seand52/beezy-frontend-test.git
 ```
 
 ## Install dependencies
