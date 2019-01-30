@@ -3,7 +3,7 @@ import { Form, Input, Button, InputNumber, Select, notification } from "antd";
 import logic from "../../logic/index";
 import FormItem from "antd/lib/form/FormItem";
 import { withRouter } from "react-router-dom";
-import "./createbook.css";
+import "./createbook.scss"
 const Option = Select.Option;
 
 class CreateBook extends Component {

@@ -5,7 +5,7 @@ import logic from "../../logic/index";
 import {notification} from 'antd'
 import Slider from "react-rangeslider";
 import "react-rangeslider/lib/index.css";
-import "./filter.css";
+import "./filter.scss"
 
 const Option = Select.Option;
 class Filter extends Component {

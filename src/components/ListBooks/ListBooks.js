@@ -3,7 +3,7 @@ import logic from "../../logic/index";
 import BookCard from "../BookCard/BookCard";
 import { notification } from "antd";
 import Filter from "../Filter/Filter";
-import "./listbooks.css";
+import "./listbooks.scss"
 
 class ListBooks extends Component {
   state = {

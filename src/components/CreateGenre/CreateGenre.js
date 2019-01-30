@@ -3,7 +3,7 @@ import { Form, Input, Button, notification } from "antd";
 import FormItem from "antd/lib/form/FormItem";
 import logic from "../../logic/index";
 import { withRouter } from "react-router-dom";
-import "./creategenre.css";
+import "./creategenre.scss"
 import GenresCard from "../GenresCard/GenresCard";
 
 class CreateGenre extends Component {
