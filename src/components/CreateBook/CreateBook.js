@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Form, Input, Button, InputNumber, Select, notification } from "antd";
+import {connect} from 'react-redux'
+import * as actions from '../../store/actions/index'
 import logic from "../../logic/index";
 import FormItem from "antd/lib/form/FormItem";
 import { withRouter } from "react-router-dom";
@@ -15,8 +17,8 @@ class CreateBook extends Component {
   };
 
   async componentDidMount() {
-    const genres = await logic.retrieveGenres();
-    this.setState({ genres });
+    // const genres = await logic.retrieveGenres();
+    // this.setState({ genres });
   }
 
   openNotification = (type, message) => {
@@ -45,18 +47,16 @@ class CreateBook extends Component {
     event.preventDefault();
     const { title, price, genre } = this.state;
     try {
-      if (this.props.action !== "save") {
-        await logic.addBook(title, price, genre);
+        await this.props.onAddBook(title, price, genre)
         this.openNotification("success", "Book added");
         this.props.history.push("/");
-      }
     } catch (err) {
       this.openNotification("error", err.message);
     }
   };
 
   render() {
-    const { genres } = this.state;
+    const { genres } = this.props;
     return (
       <section className="create-book-form-container">
         <Form
@@ -109,4 +109,16 @@ class CreateBook extends Component {
   }
 }
 
-export default withRouter(CreateBook);
+const mapStateToProps = state => {
+  return {
+    genres: state.genresReducer.genres
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddBook: (title, price, genre) => dispatch(actions.addBook(title, price, genre))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreateBook));

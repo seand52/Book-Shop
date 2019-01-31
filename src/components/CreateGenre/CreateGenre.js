@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import { Form, Input, Button, notification } from "antd";
+import { connect } from "react-redux";
 import FormItem from "antd/lib/form/FormItem";
 import logic from "../../logic/index";
 import { withRouter } from "react-router-dom";
-import "./creategenre.scss"
+import * as actions from "../../store/actions/index";
+import "./creategenre.scss";
 import GenresCard from "../GenresCard/GenresCard";
 
 class CreateGenre extends Component {
   state = {
-    name: "",
-    genres: null
+    name: ""
   };
 
   onHandleNameChange = event => {
@@ -26,17 +27,15 @@ class CreateGenre extends Component {
   };
 
   async componentDidMount() {
-    const genres = await logic.retrieveGenres();
-    this.setState({ genres });
+    this.props.onGenreFetch();
   }
 
   onHandleSubmit = async event => {
     event.preventDefault();
     try {
-      await logic.addGenre(this.state.name);
-      const genres = await logic.retrieveGenres();
+      const name = this.state.name;
+      await this.props.onSubmitGenre(name);
       this.openNotification("success", "genre created");
-      this.setState({ genres });
     } catch (err) {
       this.openNotification("error", err.message);
     }
@@ -44,9 +43,7 @@ class CreateGenre extends Component {
 
   handleDeleteGenre = async (id, name) => {
     try {
-      await logic.deleteGenre(id, name);
-      const genres = await logic.retrieveGenres();
-      this.setState({ genres });
+      await this.props.onDeleteGenre(id, name)
       this.openNotification("success", "genre deleted");
     } catch (err) {
       this.openNotification("error", err.message);
@@ -55,8 +52,7 @@ class CreateGenre extends Component {
 
   handleEdit = async () => {
     try {
-      const genres = await logic.retrieveGenres();
-      this.setState({ genres });
+      await this.props.onGenreFetch();
       this.openNotification("success", "genre updated");
     } catch (err) {
       this.openNotification("error", err.message);
@@ -64,7 +60,7 @@ class CreateGenre extends Component {
   };
 
   render() {
-    const { genres } = this.state;
+    const { genres } = this.props;
     return (
       <div className="genres-wrapper">
         <section className="create-genre-container">
@@ -108,4 +104,20 @@ class CreateGenre extends Component {
   }
 }
 
-export default withRouter(CreateGenre);
+const mapStateToProps = state => {
+  return {
+    genres: state.genresReducer.genres
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onGenreFetch: () => dispatch(actions.fetchGenres()),
+    onSubmitGenre: name => dispatch(actions.submitGenre(name)),
+    onDeleteGenre: (id,name) => dispatch(actions.deleteGenre(id, name))
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(CreateGenre));

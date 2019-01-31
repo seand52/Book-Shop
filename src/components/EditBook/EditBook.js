@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import {connect} from 'react-redux'
 import { Form, Input, Button, InputNumber, Select, notification } from "antd";
+import * as actions from '../../store/actions/index'
 import logic from "../../logic/index";
 import FormItem from "antd/lib/form/FormItem";
 import { withRouter } from "react-router-dom";
@@ -14,8 +16,8 @@ class EditBook extends Component {
   };
 
   async componentDidMount() {
-    const { book } = this.props;
-    const genres = await logic.retrieveGenres();
+    console.log('did mount')
+    const { book, genres } = this.props;
     this.setState({
       title: book.title,
       price: book.price,
@@ -50,7 +52,8 @@ class EditBook extends Component {
     event.preventDefault();
     const { title, price, genre } = this.state;
     try {
-      await logic.updateBook(this.props.book.id, title, price, genre);
+      debugger
+      await this.props.onEditBook(this.props.book.id, title, price, genre)
       this.openNotification("success", "Book updated");
       this.props.editToggle();
     } catch (err) {
@@ -59,7 +62,7 @@ class EditBook extends Component {
   };
 
   render() {
-    const { genres } = this.state;
+    const { genres } = this.props;
     return (
       <section>
         <Form
@@ -115,4 +118,16 @@ class EditBook extends Component {
   }
 }
 
-export default withRouter(EditBook);
+const mapStateToProps = state => {
+  return {
+    genres: state.genresReducer.genres
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onEditBook: (id, title, price, genre) => dispatch(actions.editBook(id, title, price, genre))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(EditBook));
