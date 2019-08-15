@@ -10,6 +10,7 @@ class App extends Component {
     edit: false,
   };
   handleEditToggle = () => {
+    debugger
     this.setState({ edit: !this.state.edit });
   };
 

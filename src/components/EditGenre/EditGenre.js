@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import logic from '../../logic/index'
 import {Button} from 'antd'
-import './editgenre.css'
+import "./editgenre.scss"
 class EditGenre extends Component {
   state = {
     name: this.props.name ? this.props.name : ''

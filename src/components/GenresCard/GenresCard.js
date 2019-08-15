@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import './genrescard.css'
+import "./genrescard.scss"
 import EditGenre from "../EditGenre/EditGenre";
 class GenresCard extends Component{
   state ={

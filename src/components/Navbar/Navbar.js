@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Menu } from "antd";
-import "./navbar.css";
+import "./navbar.scss"
 import { withRouter } from "react-router-dom";
 const { Header } = Layout;
 

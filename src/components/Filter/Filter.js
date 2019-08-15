@@ -1,16 +1,16 @@
 import React, { Component } from "react";
+import {connect} from 'react-redux'
 import { Form, Select } from "antd";
 import FormItem from "antd/lib/form/FormItem";
 import logic from "../../logic/index";
 import {notification} from 'antd'
 import Slider from "react-rangeslider";
 import "react-rangeslider/lib/index.css";
-import "./filter.css";
+import "./filter.scss"
 
 const Option = Select.Option;
 class Filter extends Component {
   state = {
-    genres: null,
     genre: null,
     minPrice: 0,
     maxPrice: 0,
@@ -26,17 +26,13 @@ class Filter extends Component {
 
   async componentDidMount() {
     try {
-    const genres = await logic.retrieveGenres();
-    if (this.props.books > 0) {
       const priceRange = await logic.retrievePriceRange();
       const { minimumPrice, maximumPrice } = priceRange;
       this.setState({
-        genres,
         minPrice: minimumPrice,
         maxPrice: maximumPrice,
         maxSlider: maximumPrice
       });
-    } 
   } catch(err) {
     this.openNotification("error", err.message)
   }
@@ -44,19 +40,11 @@ class Filter extends Component {
 
   componentDidUpdate = async prevProps => {
     try {
-    if (prevProps.genres && this.props.genres) {
-      if (prevProps.genres.length !== this.props.genres.length) {
-        const genres = await logic.retrieveGenres();
-        this.setState({genres})
-      }
-    }
     if (prevProps.books !== this.props.books || this.props.edit !== prevProps.edit) {
-      if (this.props.books > 0) {
+      if (this.props.books.length > 0) {
         const priceRange = await logic.retrievePriceRange();
-        const { minimumPrice, maximumPrice } = priceRange;
+        const { maximumPrice } = priceRange;
         this.setState({
-          minPrice: minimumPrice,
-          maxPrice: maximumPrice,
           maxSlider: maximumPrice
         });
       }
@@ -92,7 +80,7 @@ class Filter extends Component {
   };
   
   render() {
-    const { genres, minPrice, maxPrice, maxSlider } = this.state;
+    const {minPrice, maxPrice, maxSlider } = this.state;
     return (
       <section className="filters">
         <Form
@@ -109,8 +97,8 @@ class Filter extends Component {
               <Option defaultValue value="search all">
                 Search All
               </Option>
-              {genres &&
-                genres.map((item, index) => (
+              {this.props.genres &&
+                this.props.genres.map((item, index) => (
                   <Option key={index} value={item.name}>
                     {item.name}
                   </Option>
@@ -146,4 +134,15 @@ class Filter extends Component {
   }
 }
 
-export default Filter;
+const mapStateToProps = state => {
+  return {
+    genres: state.genresReducer.genres,
+    books: state.booksReducer.books,
+    totalBooks: state.booksReducer.totalBooks
+  }
+}
+
+
+
+
+export default connect(mapStateToProps)(Filter);

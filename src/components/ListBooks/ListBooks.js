@@ -1,17 +1,13 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import logic from "../../logic/index";
 import BookCard from "../BookCard/BookCard";
 import { notification } from "antd";
 import Filter from "../Filter/Filter";
-import "./listbooks.css";
+import "./listbooks.scss";
+import * as actions from "../../store/actions/index";
 
 class ListBooks extends Component {
-  state = {
-    books: null,
-    totalBooks: null,
-    genres: null
-  };
-
   openNotification = (type, message) => {
     notification[type]({
       message: message,
@@ -20,12 +16,8 @@ class ListBooks extends Component {
   };
 
   async componentDidMount() {
-    try {
-      const books = await logic.retrieveBooks();
-      this.setState({ books, totalBooks: books });
-    } catch (err) {
-      this.openNotification("error", err.message);
-    }
+    this.props.onFetchBooks();
+    this.props.onGenreFetch();
   }
 
   async componentWillReceiveProps(props) {
@@ -41,33 +33,25 @@ class ListBooks extends Component {
   }
 
   handleDeleteBook = async id => {
+    this.props.onDeleteBook(id);
+  };
+
+  handleFilter = async (genre, minPrice, maxPrice) => {
     try {
-      await logic.deleteBook(id);
-      const books = await logic.retrieveBooks();
-      this.setState({ books });
+      await this.props.onFilterBooks(genre, minPrice, maxPrice);
     } catch (err) {
       this.openNotification("error", err.message);
     }
   };
 
-  handleFilter = async (genre, minPrice, maxPrice) => {
-    try {
-    const books = await logic.retrieveBooksbyGenre(genre, minPrice, maxPrice);
-    this.setState({ books });
-    } catch(err) {
-      this.openNotification("error", err.message)
-    }
-  };
-
   render() {
-    const { books, genres, totalBooks } = this.state;
+    const { books, genres } = this.props;
     return (
       <section className="main-body">
         <div className="books-list-section">
           <Filter
             editToggle={this.props.editToggle}
-            edit = {this.props.edit}
-            books={totalBooks && totalBooks.length}
+            edit={this.props.edit}
             genres={genres}
             filter={this.handleFilter}
           />
@@ -90,4 +74,24 @@ class ListBooks extends Component {
   }
 }
 
-export default ListBooks;
+const mapStateToProps = state => {
+  return {
+    books: state.booksReducer.books,
+    error: state.booksReducer.error,
+    genres: state.genresReducer.genres
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onFetchBooks: () => dispatch(actions.fetchBooks()),
+    onDeleteBook: id => dispatch(actions.deleteBook(id)),
+    onGenreFetch: () => dispatch(actions.fetchGenres()),
+    onFilterBooks: (genre, minPrice, maxPrice) =>
+      dispatch(actions.filterBooks(genre, minPrice, maxPrice))
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ListBooks);
