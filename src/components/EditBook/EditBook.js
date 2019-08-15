@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import {connect} from 'react-redux'
 import { Form, Input, Button, InputNumber, Select, notification } from "antd";
 import * as actions from '../../store/actions/index'
-import logic from "../../logic/index";
 import FormItem from "antd/lib/form/FormItem";
 import { withRouter } from "react-router-dom";
 const Option = Select.Option;
@@ -52,7 +51,6 @@ class EditBook extends Component {
     event.preventDefault();
     const { title, price, genre } = this.state;
     try {
-      debugger
       await this.props.onEditBook(this.props.book.id, title, price, genre)
       this.openNotification("success", "Book updated");
       this.props.editToggle();

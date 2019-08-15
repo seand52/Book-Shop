@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Form, Input, Button, notification } from "antd";
 import { connect } from "react-redux";
 import FormItem from "antd/lib/form/FormItem";
-import logic from "../../logic/index";
 import { withRouter } from "react-router-dom";
 import * as actions from "../../store/actions/index";
 import "./creategenre.scss";

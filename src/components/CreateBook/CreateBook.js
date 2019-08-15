@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Form, Input, Button, InputNumber, Select, notification } from "antd";
 import {connect} from 'react-redux'
 import * as actions from '../../store/actions/index'
-import logic from "../../logic/index";
 import FormItem from "antd/lib/form/FormItem";
 import { withRouter } from "react-router-dom";
 import "./createbook.scss"
@@ -16,10 +15,6 @@ class CreateBook extends Component {
     genres: null
   };
 
-  async componentDidMount() {
-    // const genres = await logic.retrieveGenres();
-    // this.setState({ genres });
-  }
 
   openNotification = (type, message) => {
     notification[type]({

@@ -7,23 +7,14 @@ export const fetchGenresSuccess = genres => {
     genres: genres
   };
 };
-export const fetchGenresFail = err => {
-  return {
-    type: actionTypes.FETCH_GENRES_FAIL,
-    error: err.message
-  };
-};
+
 
 export const fetchGenres = () => {
   return async dispatch => {
-    try {
       const genres = await logic.retrieveGenres();
       dispatch(fetchGenresSuccess(genres));
-    } catch (err) {
-      dispatch(fetchGenresFail(err.message));
-    }
+    } 
   };
-};
 
 export const submitGenreSuccess = genres => {
   return {

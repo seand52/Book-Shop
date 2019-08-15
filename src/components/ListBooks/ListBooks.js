@@ -6,15 +6,8 @@ import { notification } from "antd";
 import Filter from "../Filter/Filter";
 import "./listbooks.scss";
 import * as actions from "../../store/actions/index";
-import { max } from "moment";
 
 class ListBooks extends Component {
-  state = {
-    // books: null,
-    // totalBooks: null,
-    genres: null
-  };
-
   openNotification = (type, message) => {
     notification[type]({
       message: message,

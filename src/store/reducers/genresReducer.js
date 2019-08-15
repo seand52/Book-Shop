@@ -2,7 +2,6 @@ import * as actionTypes from '../actions/actionTypes'
 
 const initialState = {
   genres: [],
-  error: false,
 }
 
 const reducer = (state = initialState, action) => {
@@ -11,11 +10,6 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         genres: [...action.genres]
-      }
-      case actionTypes.FETCH_GENRES_FAIL:
-      return {
-        ...state,
-        error: !state.error
       }
       case actionTypes.SUBMIT_GENRE:
       return {
