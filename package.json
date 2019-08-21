@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "antd": "^3.11.2",
+    "axios": "^0.19.0",
     "browserify-fs": "^1.0.0",
     "chai": "^4.2.0",
     "file-system": "^2.2.2",

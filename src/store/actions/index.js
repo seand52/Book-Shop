@@ -9,5 +9,6 @@ export {
 export {
   fetchGenres,
   submitGenre,
-  deleteGenre
+  deleteGenre,
+  editGenre
 } from './genreActions'

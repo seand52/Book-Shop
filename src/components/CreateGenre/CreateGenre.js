@@ -40,9 +40,9 @@ class CreateGenre extends Component {
     }
   };
 
-  handleDeleteGenre = async (id, name) => {
+  handleDeleteGenre = async (id) => {
     try {
-      await this.props.onDeleteGenre(id, name)
+      await this.props.onDeleteGenre(id)
       this.openNotification("success", "genre deleted");
     } catch (err) {
       this.openNotification("error", err.message);
@@ -113,7 +113,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onGenreFetch: () => dispatch(actions.fetchGenres()),
     onSubmitGenre: name => dispatch(actions.submitGenre(name)),
-    onDeleteGenre: (id,name) => dispatch(actions.deleteGenre(id, name))
+    onDeleteGenre: (id) => dispatch(actions.deleteGenre(id))
   };
 };
 export default connect(

@@ -35,7 +35,8 @@ class CreateBook extends Component {
 
   onHandleGenreChange = value => {
     const genre = value;
-    this.setState({ genre });
+    const {id} = this.props.genres.find(item => item.name === genre)
+    this.setState({ genre: id });
   };
 
   onHandleSubmit = async event => {

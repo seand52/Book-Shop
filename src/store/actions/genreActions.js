@@ -11,8 +11,8 @@ export const fetchGenresSuccess = genres => {
 
 export const fetchGenres = () => {
   return async dispatch => {
-      const genres = await logic.retrieveGenres();
-      dispatch(fetchGenresSuccess(genres));
+      const {data} = await logic.retrieveGenres();
+      dispatch(fetchGenresSuccess(data));
     } 
   };
 
@@ -25,19 +25,27 @@ export const submitGenreSuccess = genres => {
 
 export const submitGenre = name => {
   return async dispatch => {
-    await logic.addGenre(name);
-    const genres = await logic.retrieveGenres();
-    dispatch(submitGenreSuccess(genres));
+    const {data} = await logic.addGenre(name);
+    dispatch(submitGenreSuccess(data));
   };
 };
 
-export const deleteGenre = (id, name) => {
+export const deleteGenre = (id) => {
   return async dispatch => {
-    await logic.deleteGenre(id, name);
-    const genres = await logic.retrieveGenres();
+    const {data} = await logic.deleteGenre(parseInt(id));
     dispatch({
       type: actionTypes.DELETE_GENRE,
-      genres: genres
+      genres: data
     })
   };
 };
+
+export const editGenre = (id, name) => {
+  return async dispatch => {
+    const {data} = await logic.updateGenre(id, name)
+    dispatch({
+      type: actionTypes.EDIT_GENRE,
+      genres: data
+    })
+  }
+}

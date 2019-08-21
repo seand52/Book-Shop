@@ -21,6 +21,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         genres: [...action.genres]
       }
+      case actionTypes.EDIT_GENRE:
+        return {
+          ...state,
+          genres: [...action.genres]
+        }
     default:
     return state
   }

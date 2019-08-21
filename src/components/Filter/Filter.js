@@ -1,86 +1,73 @@
 import React, { Component } from "react";
-import {connect} from 'react-redux'
+import { connect } from "react-redux";
 import { Form, Select } from "antd";
 import FormItem from "antd/lib/form/FormItem";
 import logic from "../../logic/index";
-import {notification} from 'antd'
+import { notification } from "antd";
 import Slider from "react-rangeslider";
 import "react-rangeslider/lib/index.css";
-import "./filter.scss"
+import "./filter.scss";
 
 const Option = Select.Option;
 class Filter extends Component {
   state = {
     genre: null,
-    minPrice: 0,
-    maxPrice: 0,
-    maxSlider: 0
+    minimumPrice: this.props.minimumPrice,
+    maximumPrice: this.props.maximumPrice,
+    maxSlider: this.props.maximumPrice
   };
-
+  
   openNotification = (type, message) => {
     notification[type]({
       message: message,
-      duration: 1.5,
-    })
-  }
-
-  async componentDidMount() {
-    try {
-      const priceRange = await logic.retrievePriceRange();
-      const { minimumPrice, maximumPrice } = priceRange;
-      this.setState({
-        minPrice: minimumPrice,
-        maxPrice: maximumPrice,
-        maxSlider: maximumPrice
-      });
-  } catch(err) {
-    this.openNotification("error", err.message)
-  }
-  }
+      duration: 1.5
+    });
+  };
 
   componentDidUpdate = async prevProps => {
     try {
-    if (prevProps.books !== this.props.books || this.props.edit !== prevProps.edit) {
-      if (this.props.books.length > 0) {
-        const priceRange = await logic.retrievePriceRange();
-        const { maximumPrice } = priceRange;
-        this.setState({
-          maxSlider: maximumPrice
-        });
+      if (
+        prevProps.books !== this.props.books ||
+        this.props.edit !== prevProps.edit
+      ) {
+        if (this.props.books.length > 0) {
+          const priceRange = await logic.retrievePriceRange(this.props.books);
+          const { maximumPrice } = priceRange;
+          this.setState({
+            maxSlider: maximumPrice
+          });
+        }
       }
+    } catch (err) {
+      this.openNotification("error", err.message);
     }
-  } catch(err) {
-    this.openNotification("error", err.message)
-  }
   };
 
   onHandleGenreChange = value => {
-    const { minPrice, maxPrice } = this.state;
+    const { minimumPrice, maximumPrice } = this.props;
     const genre = value;
     this.setState({ genre }, () => {
-      this.props.filter(this.state.genre, minPrice, maxPrice);
+      this.props.filter(this.state.genre, minimumPrice, maximumPrice);
     });
   };
 
   handleOnChangeMinPrice = value => {
-    this.setState({
-      minPrice: value
-    });
+    this.props.onChangeMinPrice(value)
   };
 
   handleOnChangeMaxPrice = value => {
-    this.setState({
-      maxPrice: value
-    });
+    this.props.onChangeMaxPrice(value)
   };
 
   handleOnChangeComplete = () => {
-    const { genre, minPrice, maxPrice } = this.state;
-    this.props.filter(genre, minPrice, maxPrice);
+    const { genre } = this.state;
+    const { minimumPrice, maximumPrice } = this.props;
+    this.props.filter(genre, minimumPrice, maximumPrice);
   };
-  
+
   render() {
-    const {minPrice, maxPrice, maxSlider } = this.state;
+    console.log(this.props)
+    const {  maxSlider } = this.state;
     return (
       <section className="filters">
         <Form
@@ -109,8 +96,8 @@ class Filter extends Component {
             <p>Minimum Price</p>
             <Slider
               className="min-price__slider"
-              value={minPrice}
-              max={maxSlider}
+              value={this.props.minimumPrice}
+              max={this.props.maxSlider}
               orientation="horizontal"
               onChange={this.handleOnChangeMinPrice}
               onChangeComplete={this.handleOnChangeComplete}
@@ -122,7 +109,7 @@ class Filter extends Component {
               className="max-price__slider"
               min={0}
               max={maxSlider}
-              value={maxPrice}
+              value={this.props.maximumPrice}
               orientation="horizontal"
               onChange={this.handleOnChangeMaxPrice}
               onChangeComplete={this.handleOnChangeComplete}
@@ -139,10 +126,7 @@ const mapStateToProps = state => {
     genres: state.genresReducer.genres,
     books: state.booksReducer.books,
     totalBooks: state.booksReducer.totalBooks
-  }
-}
-
-
-
+  };
+};
 
 export default connect(mapStateToProps)(Filter);

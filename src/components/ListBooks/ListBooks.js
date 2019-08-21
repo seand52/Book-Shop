@@ -8,6 +8,13 @@ import "./listbooks.scss";
 import * as actions from "../../store/actions/index";
 
 class ListBooks extends Component {
+  state = {
+    books: null,
+    genres: null,
+    totalBooks: null,
+    minimumPrice: 0,
+    maximumPrice: 0
+  }
   openNotification = (type, message) => {
     notification[type]({
       message: message,
@@ -23,9 +30,12 @@ class ListBooks extends Component {
   async componentWillReceiveProps(props) {
     try {
       if (props) {
-        const books = await logic.retrieveBooks();
+        const {data: books} = await logic.retrieveBooks();
         const genres = await logic.retrieveGenres();
-        this.setState({ books, genres, totalBooks: books });
+        debugger
+        const { minimumPrice, maximumPrice }  = await logic.retrievePriceRange(books)
+        debugger
+        this.setState({ books, genres, totalBooks: books, minimumPrice, maximumPrice });
       }
     } catch (err) {
       this.openNotification("error", err.message);
@@ -38,22 +48,39 @@ class ListBooks extends Component {
 
   handleFilter = async (genre, minPrice, maxPrice) => {
     try {
-      await this.props.onFilterBooks(genre, minPrice, maxPrice);
+      debugger
+      await this.props.onFilterBooks(genre, minPrice, maxPrice, this.props.books);
     } catch (err) {
       this.openNotification("error", err.message);
     }
   };
 
+  onChangeMinPrice = (minimumPrice) => {
+    this.setState({
+      minimumPrice
+    });
+  }
+
+  onChangeMaxPrice = (maximumPrice) => {
+    this.setState({
+      maximumPrice
+    });
+  }
   render() {
     const { books, genres } = this.props;
+    console.log(this.state)
     return (
       <section className="main-body">
         <div className="books-list-section">
           <Filter
+            minimumPrice={this.state.minimumPrice}
+            maximumPrice={this.state.maximumPrice}
             editToggle={this.props.editToggle}
             edit={this.props.edit}
             genres={genres}
             filter={this.handleFilter}
+            onChangeMaxPrice={this.onChangeMaxPrice}
+            onChangeMinPrice={this.onChangeMinPrice}
           />
 
           <section className="books-list">
@@ -87,8 +114,8 @@ const mapDispatchToProps = dispatch => {
     onFetchBooks: () => dispatch(actions.fetchBooks()),
     onDeleteBook: id => dispatch(actions.deleteBook(id)),
     onGenreFetch: () => dispatch(actions.fetchGenres()),
-    onFilterBooks: (genre, minPrice, maxPrice) =>
-      dispatch(actions.filterBooks(genre, minPrice, maxPrice))
+    onFilterBooks: (genre, minPrice, maxPrice, books) =>
+      dispatch(actions.filterBooks(genre, minPrice, maxPrice, books))
   };
 };
 export default connect(

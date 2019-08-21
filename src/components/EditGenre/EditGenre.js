@@ -1,4 +1,6 @@
 import React, {Component} from 'react'
+import {connect} from "react-redux"
+import * as actions from "../../store/actions/index"
 import logic from '../../logic/index'
 import {Button} from 'antd'
 import "./editgenre.scss"
@@ -17,7 +19,7 @@ class EditGenre extends Component {
     event.preventDefault()
     const name = this.state.name
     const id = this.props.id
-    await logic.updateGenre(id, name)
+    this.props.onEditGenre(id, name)
     this.props.edit()
     this.props.editToggle()
   }
@@ -31,4 +33,10 @@ class EditGenre extends Component {
 
 }
 
-export default EditGenre
+const mapDispatchToProps = dispatch => {
+  return {
+    onEditGenre: (id, name) => dispatch(actions.editGenre(id, name)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(EditGenre)

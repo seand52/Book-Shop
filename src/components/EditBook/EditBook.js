@@ -49,9 +49,10 @@ class EditBook extends Component {
 
   onHandleSubmit = async event => {
     event.preventDefault();
+    console.log(this.state)
     const { title, price, genre } = this.state;
     try {
-      await this.props.onEditBook(this.props.book.id, title, price, genre)
+      await this.props.onEditBook(this.props.book.id, title, price, parseInt(genre.id))
       this.openNotification("success", "Book updated");
       this.props.editToggle();
     } catch (err) {
@@ -89,7 +90,7 @@ class EditBook extends Component {
           </FormItem>
           <FormItem label="Genre">
             <Select
-              defaultValue={this.props.book.genre}
+              defaultValue={this.props.book.genre.name}
               style={{ width: 200 }}
               onChange={this.onHandleGenreChange}
             >

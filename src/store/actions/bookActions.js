@@ -11,8 +11,8 @@ export const fetchBooksSuccess = books => {
 
 export const fetchBooks = () => {
   return async dispatch => {
-      const books = await logic.retrieveBooks();
-      dispatch(fetchBooksSuccess(books));
+      const {data} = await logic.retrieveBooks();
+      dispatch(fetchBooksSuccess(data));
     } 
   };
 
@@ -26,9 +26,8 @@ export const deleteBooksSuccess = books => {
 
 export const deleteBook = id => {
   return async dispatch => {
-      await logic.deleteBook(id);
-      const books = await logic.retrieveBooks();
-      dispatch(deleteBooksSuccess(books));
+      const {data} = await logic.deleteBook(id);
+      dispatch(deleteBooksSuccess(data));
     } 
   };
 
@@ -42,20 +41,18 @@ export const editBookSuccess = books => {
 
 export const editBook = (id, title, price, genre) => {
   return async dispatch => {
-      await logic.updateBook(id, title, price, genre);
-      const books = await logic.retrieveBooks();
-      dispatch(editBookSuccess(books));
+      const {data} = await logic.updateBook(id, title, price, genre);
+      dispatch(editBookSuccess(data));
     } 
   };
 
 
 export const addBook = (title, price, genre) => {
   return async dispatch => {
-      await logic.addBook(title, price, genre);
-      const books = await logic.retrieveBooks();
+      const {data} =await logic.addBook(title, price, genre);
       dispatch({
         type: actionTypes.ADD_BOOK_SUCCESS,
-        books: books
+        books: data
       });
   };
 };
@@ -68,10 +65,11 @@ export const filterBooksSuccess = books => {
 };
 
 
-export const filterBooks = (genre, minPrice, maxPrice) => {
+export const filterBooks = (genre, minPrice, maxPrice, books) => {
+  debugger
   return async dispatch => {
-      const books = await logic.retrieveBooksbyGenre(genre, minPrice, maxPrice);
-      dispatch(filterBooksSuccess(books));
+      const result = logic.retrieveBooksbyGenre(genre, minPrice, maxPrice, books);
+      dispatch(filterBooksSuccess(result));
     }
   };
 

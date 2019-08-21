@@ -24,7 +24,7 @@ class BookCard extends Component {
             <span>Title</span>: {title}
           </p>
           <p>
-            <span>Genre</span>: {genre}
+            <span>Genre</span>: {genre.name}
           </p>
           <p>
             <span>Price</span>: {`${price} euros`}
