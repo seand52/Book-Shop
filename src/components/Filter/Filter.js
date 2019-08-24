@@ -12,9 +12,6 @@ const Option = Select.Option;
 class Filter extends Component {
   state = {
     genre: null,
-    minimumPrice: this.props.minimumPrice,
-    maximumPrice: this.props.maximumPrice,
-    maxSlider: this.props.maximumPrice
   };
   
   openNotification = (type, message) => {
@@ -46,8 +43,15 @@ class Filter extends Component {
   onHandleGenreChange = value => {
     const { minimumPrice, maximumPrice } = this.props;
     const genre = value;
-    this.setState({ genre }, () => {
-      this.props.filter(this.state.genre, minimumPrice, maximumPrice);
+    if (genre === 'search all') {
+      this.setState({ genre: 'search all' }, () => {
+        this.props.filter(null, minimumPrice, maximumPrice);
+      });  
+      return
+    }
+    const {id} = this.props.genres.find(item => item.name === genre)
+    this.setState({ genre: id }, () => {
+      this.props.filter(id, minimumPrice, maximumPrice);
     });
   };
 
@@ -62,12 +66,14 @@ class Filter extends Component {
   handleOnChangeComplete = () => {
     const { genre } = this.state;
     const { minimumPrice, maximumPrice } = this.props;
+    if (genre === 'search all') {
+      this.props.filter(null, minimumPrice, maximumPrice);  
+      return
+    }
     this.props.filter(genre, minimumPrice, maximumPrice);
   };
 
   render() {
-    console.log(this.props)
-    const {  maxSlider } = this.state;
     return (
       <section className="filters">
         <Form
@@ -97,7 +103,7 @@ class Filter extends Component {
             <Slider
               className="min-price__slider"
               value={this.props.minimumPrice}
-              max={this.props.maxSlider}
+              max={this.props.totalMaximumPrice}
               orientation="horizontal"
               onChange={this.handleOnChangeMinPrice}
               onChangeComplete={this.handleOnChangeComplete}
@@ -108,7 +114,7 @@ class Filter extends Component {
             <Slider
               className="max-price__slider"
               min={0}
-              max={maxSlider}
+              max={this.props.totalMaximumPrice}
               value={this.props.maximumPrice}
               orientation="horizontal"
               onChange={this.handleOnChangeMaxPrice}
@@ -125,7 +131,9 @@ const mapStateToProps = state => {
   return {
     genres: state.genresReducer.genres,
     books: state.booksReducer.books,
-    totalBooks: state.booksReducer.totalBooks
+    minimumPrice: state.booksReducer.minimumPrice,
+    maximumPrice: state.booksReducer.maximumPrice,
+    totalMaximumPrice: state.booksReducer.totalMaximumPrice
   };
 };
 

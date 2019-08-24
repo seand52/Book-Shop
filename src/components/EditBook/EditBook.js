@@ -15,7 +15,6 @@ class EditBook extends Component {
   };
 
   async componentDidMount() {
-    console.log('did mount')
     const { book, genres } = this.props;
     this.setState({
       title: book.title,
@@ -49,7 +48,6 @@ class EditBook extends Component {
 
   onHandleSubmit = async event => {
     event.preventDefault();
-    console.log(this.state)
     const { title, price, genre } = this.state;
     try {
       await this.props.onEditBook(this.props.book.id, title, price, parseInt(genre.id))

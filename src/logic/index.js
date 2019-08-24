@@ -4,6 +4,14 @@ import axios from "axios";
 //Import method for tests
 // const data = require('../data/index')
 const logic = {
+
+  _makeQuery(obj) {
+    const esc = encodeURIComponent;
+    return Object.keys(obj)
+    .map(k => esc(k) + '=' + esc(obj[k]))
+    .join('&');
+
+  },
   /**
    * Adds a book to local storage
    * @param {String} title
@@ -12,16 +20,10 @@ const logic = {
    * @returns {Promise}
    */
   addBook(title, price, genre) {
-    validate([
-      { key: "title", value: title, type: String },
-      { key: "price", value: price, type: Number },
-      { key: "genre", value: genre, type: Number }
-    ]);
-
     return axios.post("http://localhost:8000/api/books", {
       title,
-      id_genre: genre,
-      price
+      id_genre: parseInt(genre),
+      price: parseFloat(price)
     });
   },
 
@@ -32,23 +34,29 @@ const logic = {
    * @param {Number} maxPrice
    * @returns {Promise}
    */
-  retrieveBooksbyGenre(genre, minPrice, maxPrice, books) {
-    debugger
+  retrieveBooksbyGenre(genre, minPrice, maxPrice) {
     validate([
       { key: "genre", value: genre, type: String, optional: true },
       { key: "minPrice", value: minPrice, type: Number },
       { key: "maxPrice", value: maxPrice, type: Number }
     ]);
-    if (genre && genre !== "search all")
-      return books.filter(
-        item =>
-          item.genre.title === genre &&
-          item.price >= minPrice &&
-          item.price <= maxPrice
-      );
-    return books.filter(
-      item => item.price >= minPrice && item.price <= maxPrice
-    );
+
+    let params = {
+      id_genre: genre,
+      min_price: minPrice,
+      max_price: maxPrice
+    }
+
+    for (let prop in params) {
+      if (params[prop] === null) {
+        delete params[prop]
+      }
+    }
+
+    const query = this._makeQuery(params)
+    return axios.get(`http://localhost:8000/api/books?${query}`)
+    
+
   },
 
   /**

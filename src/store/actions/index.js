@@ -3,7 +3,9 @@ export {
   deleteBook,
   editBook,
   addBook,
-  filterBooks
+  filterBooks,
+  changeMinPrice,
+  changeMaxPrice
 } from './bookActions'
 
 export {
