@@ -2,6 +2,10 @@
 
 This bookshelf app was created with create-react-app. For stlying I have used the framework [Ant Design](https://ant.design) for styles and added custom styles using SCSS and BEM methodology. 
 
+This project uses an API I made with Go and the data is stored in a MySQL database. You can find the API repo here:
+
+[Go API](https://github.com/seand52/bookshelf-api)
+
 View the [Live Demo](https://beezy-bookshop-seand.surge.sh) here!
 
 # Getting Started
