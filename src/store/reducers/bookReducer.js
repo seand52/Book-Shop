@@ -5,6 +5,7 @@ const initialState = {
   minimumPrice: null,
   maximumPrice: null,
   totalMaximumPrice: null,
+  loading: true,
 };
 
 const reducer = (state = initialState, action) => {
@@ -16,6 +17,7 @@ const reducer = (state = initialState, action) => {
         minimumPrice: action.minimumPrice,
         maximumPrice: action.maximumPrice,
         totalMaximumPrice: action.totalMaximumPrice,
+        loading: false
       };
 
     case actionTypes.DELETE_BOOK_SUCCESS:
@@ -56,6 +58,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         maximumPrice: action.maximumPrice
       };
+    case actionTypes.SET_LOADING:
+      return {
+        ...state,
+        loading: true
+      }
     default:
       return state;
   }

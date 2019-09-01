@@ -6,6 +6,7 @@ import { notification } from "antd";
 import Filter from "../Filter/Filter";
 import "./listbooks.scss";
 import * as actions from "../../store/actions/index";
+import Spinner from "../Spinner/Spinner";
 
 class ListBooks extends Component {
   state = {
@@ -43,8 +44,9 @@ class ListBooks extends Component {
   onChangeMaxPrice = (maximumPrice) => {
     this.props.changeMaxPrice(maximumPrice)
   }
+
   render() {
-    const { books, genres } = this.props;
+    const { books, genres, loading } = this.props;
     return (
       <section className="main-body">
         <div className="books-list-section">
@@ -55,10 +57,10 @@ class ListBooks extends Component {
             filter={this.handleFilter}
             onChangeMaxPrice={this.onChangeMaxPrice}
             onChangeMinPrice={this.onChangeMinPrice}
-          />
-
+         />  
           <section className="books-list">
-            {books && books.length ?
+            {loading ? <Spinner/> : null}
+            {!loading && books && books.length ?
               books.map((item, index) => (
                 <BookCard
                   length={books.length}
@@ -67,8 +69,9 @@ class ListBooks extends Component {
                   book={item}
                   deleteBook={this.handleDeleteBook}
                 />
-              )) : <p>Sorry, we don't have any books that match with what you searched for!</p>}
-          </section>
+              )) : null}
+            {!loading && books && !books.length ? <p>Sorry, we don't have any books that match with what you searched for!</p> : null}
+          </section> 
         </div>
       </section>
     );
@@ -80,6 +83,7 @@ const mapStateToProps = state => {
     books: state.booksReducer.books,
     error: state.booksReducer.error,
     genres: state.genresReducer.genres,
+    loading: state.booksReducer.loading,
     // minimumPrice: state.booksReducer.minimumPrice,
     // maximumPrice: state.booksReducer.maximumPrice
   };

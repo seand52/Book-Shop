@@ -11,9 +11,16 @@ export const fetchBooksSuccess = (books, minimumPrice, maximumPrice) => {
   };
 };
 
+export const setLoading = () => {
+  return {
+    type: actionTypes.SET_LOADING
+  }
+}
+
 export const fetchBooks = () => {
   return async dispatch => {
     const { data } = await logic.retrieveBooks();
+    dispatch(setLoading())
     const { minimumPrice, maximumPrice } = logic.retrievePriceRange(data);
     dispatch(fetchBooksSuccess(data, minimumPrice, maximumPrice));
   };
@@ -29,7 +36,15 @@ export const deleteBooksSuccess = books => {
 export const deleteBook = id => {
   return async dispatch => {
     const { data } = await logic.deleteBook(id);
-    dispatch(deleteBooksSuccess(data));
+    const { minimumPrice, maximumPrice } = logic.retrievePriceRange(data);
+    dispatch({
+      type: actionTypes.ADD_BOOK_SUCCESS,
+      books: data,
+      minimumPrice,
+      maximumPrice,
+      totalMaximumPrice: maximumPrice
+    });
+
   };
 };
 

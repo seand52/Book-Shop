@@ -5,7 +5,9 @@ export {
   addBook,
   filterBooks,
   changeMinPrice,
-  changeMaxPrice
+  changeMaxPrice,
+  setLoading
+
 } from './bookActions'
 
 export {

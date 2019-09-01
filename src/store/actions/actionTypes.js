@@ -12,3 +12,5 @@ export const EDIT_GENRE = "EDIT_GENRE";
 
 export const SET_MINIMUM_PRICE = "SET_MINIMUM_PRICE";
 export const SET_MAXIMUM_PRICE = "SET_MAXIMUM_PRICE";
+
+export const SET_LOADING = "SET_LOADING";

@@ -20,7 +20,10 @@ const logic = {
    * @returns {Promise}
    */
   addBook(title, price, genre) {
-    return axios.post("http://localhost:8000/api/books", {
+    if (!title.trim().length || !genre.trim().length || !price.toString().trim().length ) {
+      throw Error ('cannot have blank fields')
+    }
+    return axios.post(`${process.env.REACT_APP_API_URL}/books`, {
       title,
       id_genre: parseInt(genre),
       price: parseFloat(price)
@@ -54,7 +57,7 @@ const logic = {
     }
 
     const query = this._makeQuery(params)
-    return axios.get(`http://localhost:8000/api/books?${query}`)
+    return axios.get(`${process.env.REACT_APP_API_URL}/books?${query}`)
     
 
   },
@@ -64,7 +67,7 @@ const logic = {
    * @returns {Promise}
    */
   async retrieveBooks() {
-    return axios.get("http://localhost:8000/api/books");
+    return axios.get(`${process.env.REACT_APP_API_URL}/books`);
   },
 
   /**
@@ -97,7 +100,7 @@ const logic = {
       { key: "price", value: price, type: Number, optional: true },
       { key: "genre", value: genre, type: Number, optional: true }
     ]);;
-    return axios.patch(`http://localhost:8000/api/books/${id}`, {
+    return axios.patch(`${process.env.REACT_APP_API_URL}/books/${id}`, {
       title,
       price,
       id_genre: genre
@@ -109,7 +112,7 @@ const logic = {
    * @returns {Promise}
    */
   deleteBook(id) {
-    return axios.delete(`http://localhost:8000/api/books/${id}`);
+    return axios.delete(`${process.env.REACT_APP_API_URL}/books/${id}`);
   },
 
   /**
@@ -119,7 +122,7 @@ const logic = {
    */
   addGenre(name) {
     validate([{ key: "name", value: name, type: String }]);
-    return axios.post("http://localhost:8000/api/genres", { name });
+    return axios.post(`${process.env.REACT_APP_API_URL}/genres`, { name });
   },
 
   /**
@@ -130,7 +133,7 @@ const logic = {
    */
   deleteGenre(id, name) {
     validate([{ key: "id", value: id, type: Number }]);
-    return axios.delete(`http://localhost:8000/api/genres/${id}`);
+    return axios.delete(`${process.env.REACT_APP_API_URL}/genres/${id}`);
   },
 
   /**
@@ -138,7 +141,7 @@ const logic = {
    * @returns {Promise}
    */
   retrieveGenres() {
-    return axios.get("http://localhost:8000/api/genres");
+    return axios.get(`${process.env.REACT_APP_API_URL}/genres`);
   },
 
   /**
@@ -152,7 +155,7 @@ const logic = {
       { key: "id", value: id, type: Object },
       { key: "name", value: name, type: Object }
     ]);
-    return axios.patch(`http://localhost:8000/api/genres/${id}`, { name });
+    return axios.patch(`${process.env.REACT_APP_API_URL}/genres/${id}`, { name });
   }
 };
 //Export method for tests
